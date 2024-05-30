@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Role, UserRole
 from .forms import CustomUserCreationForm, CustomUserChangeForm
+
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -21,7 +22,25 @@ class CustomUserAdmin(UserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
-        ),
+         ),
     )
 
+
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+class RoleAdmin(admin.ModelAdmin):
+    model = Role
+    list_display = ('name',)
+
+
+admin.site.register(Role, RoleAdmin)
+
+
+class UserRoleAdmin(admin.ModelAdmin):
+    model = UserRole
+    list_display = ('user', 'role',)
+    ordering = ('user',)
+
+
+admin.site.register(UserRole, UserRoleAdmin)

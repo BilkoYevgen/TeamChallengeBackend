@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 
+from django.utils.translation import gettext_lazy as _
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -41,3 +43,26 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class Role(models.Model):
+    name = models.CharField(_('role name'), max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = _('Role')
+        verbose_name_plural = _('Roles')
+
+    def __str__(self):
+        return self.name
+
+
+class UserRole(models.Model):
+    user = models.ForeignKey(CustomUser, verbose_name=_('user'), on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, verbose_name=_('role'), on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = _('User Role')
+        verbose_name_plural = _('User Roles')
+
+    def __str__(self):
+        return f"{self.user.email} - {self.role.name}"
