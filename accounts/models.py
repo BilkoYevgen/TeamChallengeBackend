@@ -26,25 +26,6 @@ class CustomUserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    phone = models.CharField(max_length=15, null=True, blank=True)
-    address = models.CharField(max_length=200, null=True, blank=True)
-
-    objects = CustomUserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    def __str__(self):
-        return self.email
-
-
 class Role(models.Model):
     name = models.CharField(_('role name'), max_length=50, unique=True)
 
@@ -56,13 +37,22 @@ class Role(models.Model):
         return self.name
 
 
-class UserRole(models.Model):
-    user = models.ForeignKey(CustomUser, verbose_name=_('user'), on_delete=models.CASCADE)
-    role = models.ForeignKey(Role, verbose_name=_('role'), on_delete=models.CASCADE)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    role = models.ManyToManyField(Role, blank=True, related_name='users', verbose_name=_('role'))
 
-    class Meta:
-        verbose_name = _('User Role')
-        verbose_name_plural = _('User Roles')
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f"{self.user.email} - {self.role.name}"
+        return self.email
