@@ -9,7 +9,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    roles = RoleSerializer(source='role_set', many=True)
+    roles = RoleSerializer(source='role', many=True)
     password = serializers.CharField(write_only=True, required=True)
     password2 = serializers.CharField(write_only=True, required=True)
 
