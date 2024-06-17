@@ -8,7 +8,8 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    list_display = ('email', 'first_name', 'last_name', 'is_staff', 'created_at', 'updated_at', 'phone', 'address')
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'created_at', 'updated_at', 'phone',
+                    'address')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'role')
     filter_horizontal = ('role',)
     search_fields = ('email', 'first_name', 'last_name')
