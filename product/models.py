@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.utils.translation import gettext_lazy as _
 
 
@@ -17,7 +16,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     name = models.CharField(_('name'), max_length=80)
     category = models.ForeignKey(
-        Category, verbose_name=_('category name'), related_name='categories', on_delete=models.CASCADE
+        Category, verbose_name=_('category name'), related_name='subcategories', on_delete=models.CASCADE
     )
 
     def __str__(self):
@@ -33,11 +32,14 @@ class Product(models.Model):
     description = models.TextField(_('description'))
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2)
     image_urls = models.TextField(_('image URLs'), help_text=_("Enter image URLs separated by commas."))
-    subcategory = models.ManyToManyField(SubCategory, verbose_name=_('subcategory'), related_name='products')
+    subcategories = models.ManyToManyField(SubCategory, verbose_name=_('subcategories'), related_name='products')
 
     class Meta:
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
+        constraints = [
+            models.UniqueConstraint(fields=['name'], name='unique_product_name')
+        ]
 
     def __str__(self):
         return self.name
