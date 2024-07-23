@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Team Challenge API',
-    'DESCRIPTION': 'Hi everyone)',
+    'DESCRIPTION': 'Hi everyone from heroku)',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
